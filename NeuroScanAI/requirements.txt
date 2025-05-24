@@ -1,1 +1,1 @@
-fastapi\nuvicorn
+fastapi\nuvicorn\nprometheus_client\nscikit-learn\nnumpy

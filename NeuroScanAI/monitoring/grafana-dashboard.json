@@ -1,1 +1,1 @@
-{ "dashboard": { "title": "NeuroScanAI Monitoring", "panels": [{ "type": "graph", "title": "Anomaly Rate", "targets": [{ "expr": "anomaly_rate_metric" }] }] } }
+{ "dashboard": { "title": "NeuroScanAI Monitoring", "panels": [{ "type": "graph", "title": "Anomaly Rate", "targets": [{ "expr": "inference_requests_total" }] }] } }

@@ -1,16 +1,1 @@
-from fastapi import FastAPI, Request
-from src.anomaly_detection.detector import detect_anomalies
-from src.utils.phi_masker import mask_phi
-import logging
-
-logging.basicConfig(filename="inference.log", level=logging.INFO, format="%(asctime)s - %(message)s")
-
-app = FastAPI()
-
-@app.post("/detect")
-async def detect(request: Request):
-    data = await request.json()
-    masked = mask_phi(data.get("text", ""))
-    result = detect_anomalies(data)
-    logging.info(f"Inference: {masked} -> {result}")
-    return {"masked_input": masked, "detection": result}
+from fastapi import FastAPI, Request\nimport logging\nfrom src.anomaly_detection.detector import detect_anomalies\nfrom src.utils.phi_masker import mask_phi\nfrom prometheus_client import Counter, Histogram, generate_latest\nfrom fastapi.responses import PlainTextResponse\nimport time\nimport random\n\nlogging.basicConfig(filename="inference.log", level=logging.INFO, format="%(asctime)s - %(message)s")\n\napp = FastAPI()\nrequests_total = Counter("inference_requests_total", "Total inference requests")\nlatency_histogram = Histogram("inference_latency_seconds", "Inference response latency")\n\n@app.post("/detect")\n@latency_histogram.time()\nasync def detect(request: Request):\n    requests_total.inc()\n    body = await request.json()\n    message = mask_phi(str(body.get("text", "")))\n    data = body.get("values", [1, 2, 3, 100])\n    anomalies = detect_anomalies(data)\n\n    if random.random() < 0.2:\n        time.sleep(2)  # simulate SLA breach\n\n    logging.info(f"Request: {body} => {anomalies}")\n    return {"masked_text": message, "detection": anomalies}\n\n@app.get("/metrics")\ndef metrics():\n    return PlainTextResponse(generate_latest(), media_type="text/plain")

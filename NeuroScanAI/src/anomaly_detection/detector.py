@@ -1,4 +1,1 @@
-import random
-def detect_anomalies(data):
-    score = random.random()
-    return {"anomaly": score > 0.7, "score": score}
+from sklearn.ensemble import IsolationForest\nimport numpy as np\n\ndef detect_anomalies(data):\n    model = IsolationForest(n_estimators=100, contamination=0.1)\n    reshaped = np.array(data).reshape(-1, 1)\n    preds = model.fit_predict(reshaped)\n    return {'anomalies': (preds == -1).tolist()}
