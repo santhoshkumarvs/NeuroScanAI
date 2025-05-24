@@ -1,1 +1,15 @@
-name: NeuroScan Pipeline\non: [push]\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v2\n      - name: Run Simulation\n        run: echo 'Run NeuroScan anomaly detection logic'
+name: NeuroScan Pipeline
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Simulate Build
+        run: echo " Building containers and environment"
+      - name: Simulate Anomaly Test
+        run: python src/anomaly_detection/detector.py
+      - name: Simulate SLA Alerting
+        run: python monitoring/sla_simulation.py &
+      - name: Simulate PHI Masking Test
+        run: python -c "from src.utils.phi_masker import mask_phi; print(mask_phi('Patient John Doe'))"
