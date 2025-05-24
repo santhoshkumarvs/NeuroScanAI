@@ -1,3 +1,17 @@
+ NeuroScan AI
+🎯 Purpose
+NeuroScan AI is designed to simulate an end-to-end MLOps setup for medical anomaly detection, integrating:
+
+Realistic detection logic via IsolationForest
+
+PHI masking for privacy compliance
+
+Logging and monitoring
+
+SLA breach simulation for reliability testing
+
+
+
 NeuroScanAI/
 │
 ├── src/                            # Core application code
